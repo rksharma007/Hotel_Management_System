@@ -1,6 +1,6 @@
 package Interfaces;
 
-public interface Users {
+public interface User_Interface {
     int login();
     int register();
 }

@@ -1,8 +1,10 @@
 package Classes;
 
-import Interfaces.Users;
+import Interfaces.Admin_Interface;
+import Interfaces.User_Interface;
+import Server.Admin_Route;
 
-public class Admin implements Users {
+public class Admin implements User_Interface, Admin_Interface {
     private final String username;
     private final String password;
 
@@ -13,12 +15,45 @@ public class Admin implements Users {
 
     public int login(){
         //logic for login
-        int us_len = username.length();
-        int pas_len = password.length();
         return 1;
     }
     public int register(){
         //logic for register
         return 1;
+    }
+
+    @Override
+    public int get_customer_details() {
+        return 0;
+    }
+
+    @Override
+    public int get_audit_details() {
+        return 0;
+    }
+
+    @Override
+    public int book_customer() {
+        return 0;
+    }
+
+    @Override
+    public int check_in_customer() {
+        return 0;
+    }
+
+    @Override
+    public int check_out_customer() {
+        return 0;
+    }
+
+    @Override
+    public int pay_expense() {
+        return 0;
+    }
+
+    @Override
+    public int approve_request() {
+        return 0;
     }
 }
