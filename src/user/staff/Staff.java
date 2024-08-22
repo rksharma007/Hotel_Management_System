@@ -15,7 +15,7 @@ public class Staff implements User_Interface, Staff_Interface {
         this.password = password;
     }
     @Override
-    public String Hashing(String password){
+    public String hashing(String password){
 
         try {
             // Create MessageDigest instance for SHA-256

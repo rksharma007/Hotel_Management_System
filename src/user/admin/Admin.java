@@ -1,18 +1,24 @@
 package user.admin;
 
+import database.routes.Admin_Route;
+import models.Customer;
+import models.Room;
 import user.User_Interface;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class Admin implements User_Interface, Admin_Interface {
 
+    private Admin_Route admin_route;
     public Admin(){
+        admin_route = new Admin_Route();
     }
 
     @Override
-    public String Hashing(String password){
+    public String hashing(String password){
 
         try {
             // Create MessageDigest instance for SHA-256
@@ -43,21 +49,38 @@ public class Admin implements User_Interface, Admin_Interface {
     }
 
     public int login(String username, String password){
-        return 1;
+        if(username.isEmpty() || password.isEmpty())return 0;
+//        password encryption
+        String hashedPassword = hashing(password);
+//        Check if username and password exist
+        return admin_route.is_exist(username,hashedPassword);
     }
 
     @Override
     public int get_customer_details() {
-        return 0;
+//        Retrieves all available customers from the table.
+        List<Customer> customers = admin_route.get_customers();
+        return 1;
     }
 
     @Override
     public int get_audit_details() {
         return 0;
     }
+
+
+    @Override
+    public int check_availability(String checkin, String checkout){
+        if(checkin.isEmpty() && checkout.isEmpty()){
+            admin_route.check_availability(checkin,checkout);
+            return 1;
+        }
+        return 0;
+    }
 //------------
     @Override
-    public int book_customer() {
+    public int book_customer(String check_in, String check_out, String booking_date, String address, String cust_name, String contact, Room r1, Room r2) {
+
         return 0;
     }
 
