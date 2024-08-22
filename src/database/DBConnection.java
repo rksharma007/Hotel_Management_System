@@ -8,8 +8,10 @@ public class DBConnection {
     private static final String user= "avnadmin";
     private static final String password = "AVNS_f8nTcBG95-F_WEUcRih";
     private static final String dbURL = "jdbc:mysql://mysql-rk-69-hotel-69.h.aivencloud.com:21410/HotelManagementSystem";
-    static Connection connection;
-    public static Connection connect() {
+
+    private static Connection connection;
+    private DBConnection(){}
+    private static Connection connect() {
         try {//org.apache.derby.jdbc.EmbeddedDriver"
             System.out.println("Loading driver!!!");
             //Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
@@ -37,9 +39,18 @@ public class DBConnection {
 
         return connection;
     }
+
+    public static synchronized Connection get_connection(){
+        if(connection == null){
+            connection = connect();
+        }
+        return connection;
+    }
+
     static void close_connection (){
         try {
             connection.close();
+            connection=null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
