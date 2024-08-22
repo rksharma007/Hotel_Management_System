@@ -13,6 +13,8 @@ public class Admin implements Users {
 
     public int login(){
         //logic for login
+        int us_len = username.length();
+        int pas_len = password.length();
         return 1;
     }
     public int register(){
