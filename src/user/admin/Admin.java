@@ -2,13 +2,80 @@ package user.admin;
 
 import user.User_Interface;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Admin implements User_Interface, Admin_Interface {
 
-    public Admin(){
+    @JsonProperty("admin_id")
+    private int adminId;
+
+    @JsonProperty("admin_name")
+    private String adminName;
+
+    @JsonProperty("admin_password")
+    private String adminPassword;
+
+    @JsonProperty("admin_contact")
+    private String adminContact;
+
+    @JsonProperty("admin_username")
+    private String adminUsername;
+
+    // Default constructor (required for deserialization)
+    public Admin() {}
+
+    // Parameterized constructor (optional)
+    public Admin(int adminId, String adminName, String adminPassword, String adminContact, String adminUsername) {
+        this.adminId = adminId;
+        this.adminName = adminName;
+        this.adminPassword = adminPassword;
+        this.adminContact = adminContact;
+        this.adminUsername = adminUsername;
+    }
+
+    // Getters and setters
+    public int getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
+    }
+
+    public String getAdminName() {
+        return adminName;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
+
+    public String getAdminPassword() {
+        return adminPassword;
+    }
+
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
+    }
+
+    public String getAdminContact() {
+        return adminContact;
+    }
+
+    public void setAdminContact(String adminContact) {
+        this.adminContact = adminContact;
+    }
+
+    public String getAdminUsername() {
+        return adminUsername;
+    }
+
+    public void setAdminUsername(String adminUsername) {
+        this.adminUsername = adminUsername;
     }
 
     @Override

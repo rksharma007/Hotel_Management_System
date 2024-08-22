@@ -2,18 +2,70 @@ package user.staff;
 
 import user.User_Interface;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Staff implements User_Interface, Staff_Interface {
-    private final String username;
-    private final String password;
+    @JsonProperty("staff_id")
+    private int staffId;
 
-    public Staff(String username, String password) {
-        this.username = username;
-        this.password = password;
+    @JsonProperty("staff_name")
+    private String staffName;
+
+    @JsonProperty("staff_username")
+    private String staffUsername;
+
+    @JsonProperty("staff_password")
+    private String staffPassword;
+
+    // Default constructor (required for deserialization)
+    public Staff() {}
+
+    // Parameterized constructor (optional)
+    public Staff(int staffId, String staffName, String staffUsername, String staffPassword) {
+        this.staffId = staffId;
+        this.staffName = staffName;
+        this.staffUsername = staffUsername;
+        this.staffPassword = staffPassword;
     }
+
+    // Getters and setters
+    public int getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(int staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getStaffUsername() {
+        return staffUsername;
+    }
+
+    public void setStaffUsername(String staffUsername) {
+        this.staffUsername = staffUsername;
+    }
+
+    public String getStaffPassword() {
+        return staffPassword;
+    }
+
+    public void setStaffPassword(String staffPassword) {
+        this.staffPassword = staffPassword;
+    }
+
+
     @Override
     public String Hashing(String password){
 
