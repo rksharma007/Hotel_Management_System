@@ -1,5 +1,7 @@
 package user.staff;
 
+import database.routes.Staff_Route;
+import models.Service;
 import user.User_Interface;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Staff implements User_Interface, Staff_Interface {
     @JsonProperty("staff_id")
@@ -21,8 +25,11 @@ public class Staff implements User_Interface, Staff_Interface {
     @JsonProperty("staff_password")
     private String staffPassword;
 
+    private Staff_Route staff_route;
     // Default constructor (required for deserialization)
-    public Staff() {}
+    public Staff() {
+        this.staff_route = new Staff_Route();
+    }
 
     // Parameterized constructor (optional)
     public Staff(int staffId, String staffName, String staffUsername, String staffPassword) {
@@ -30,6 +37,8 @@ public class Staff implements User_Interface, Staff_Interface {
         this.staffName = staffName;
         this.staffUsername = staffUsername;
         this.staffPassword = staffPassword;
+
+        this.staff_route = new Staff_Route();
     }
 
     // Getters and setters
@@ -67,7 +76,7 @@ public class Staff implements User_Interface, Staff_Interface {
 
 
     @Override
-    public String Hashing(String password){
+    public String hashing(String password){
 
         try {
             // Create MessageDigest instance for SHA-256
@@ -99,21 +108,21 @@ public class Staff implements User_Interface, Staff_Interface {
 
     @Override
     public int login(String username, String password) {
-        return 0;
+        if(username.isEmpty() || password.isEmpty())return 0;
+//        password encryption
+        String hashedPassword = hashing(password);
+//        Check if username and password exist
+        return staff_route.login(username,hashedPassword);
     }
 
     @Override
-    public int register(String name, String contact,String username, String password) {
-        return 0;
+    public List<Service> get_service() {
+        List<Service> services = new ArrayList<>();// service_id, service_name
+        return services;
     }
 
     @Override
-    public int get_service() {
-        return 0;
-    }
-
-    @Override
-    public int add_customer_expense(String room) {
+    public int add_customer_expense(int room_no, int service_id) {
         return 0;
     }
 }

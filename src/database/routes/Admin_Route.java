@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import database.DBConnection;
 import models.Customer;
+import models.Response;
 import models.Room;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +22,19 @@ public class Admin_Route {
         this.connection = DBConnection.get_connection();
         this.obj_mapper = new ObjectMapper();
     }
-    //output: 1- exists, 0 - doesnt exists, -1 - server error
+    //output: 1- exists, 0 - doesn't exists, -1 - server error
     public int login(String username, String password){
         Connection connection = DBConnection.get_connection();
 
-        String sql= "SELECT * FROM Admin WHERE admin_username='"+username+"' and admin_password='"+password+"'";
+        String sql= "SELECT * FROM Admin WHERE admin_username=? and admin_password=?";
         try {
-            Statement stat = connection.createStatement();
-            ResultSet rs =stat.executeQuery(sql);
+            PreparedStatement pstat = connection.prepareStatement(sql);
+            pstat.setString(1, username);
+            pstat.setString(2, password);
+            ResultSet rs =pstat.executeQuery();
             ResultSetMetaData resultSetMetaData =rs.getMetaData();
             int colCount = resultSetMetaData.getColumnCount();
+//            System.out.println(colCount);
             if(colCount == 0)
                 return 0;
             else
@@ -41,11 +46,33 @@ public class Admin_Route {
         return -1;
     }
 
-    //left
+    //done
     public List<Customer> get_customers(){
         List<Customer> active_customers = new ArrayList<>();
 
-        //request to db
+        String sql= "SELECT * FROM Booking Where status = 1;";
+        try {
+            Statement stat = connection.createStatement();
+            ResultSet rs =stat.executeQuery(sql);
+            ResultSetMetaData resultSetMetaData =rs.getMetaData();
+            int colCount = resultSetMetaData.getColumnCount();
+            String result = "";
+            while(rs.next()){
+                active_customers.add(new Customer(
+                        rs.getInt("booking_id"),
+                        rs.getString("check_in"),
+                        rs.getString("check_out"),
+                        rs.getString("booking_date"),
+                        rs.getString("address"),
+                        rs.getString("booking_id"),
+                        rs.getString("booking_id"),
+                        rs.getString("booking_id"),
+                        rs.getInt("status")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return active_customers;
     }
@@ -64,17 +91,16 @@ public class Admin_Route {
             ResultSetMetaData resultSetMetaData =rs.getMetaData();
 //            int colCount = resultSetMetaData.getColumnCount();
             String result = "";
-            ObjectMapper om = new ObjectMapper();
             while(rs.next()){
                 result = rs.getString("AllRooms");
-                available_rooms = om.readValue(result, new TypeReference<List<Room>>() {
+                available_rooms = obj_mapper.readValue(result, new TypeReference<List<Room>>() {
                 });
             }
             return available_rooms;
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -157,17 +183,171 @@ public class Admin_Route {
         return available_rooms;
     }
 
+    // done
     public int pay_expenses(int room_number){
 
-        return 1;
+        String sql= "SELECT ClearExpense(?) as expense;";
+        try {
+//            Statement stat = connection.createStatement();
+            PreparedStatement pstat = connection.prepareStatement(sql);
+            pstat.setInt(1, room_number);
+            ResultSet rs =pstat.executeQuery();
+            ResultSetMetaData resultSetMetaData =rs.getMetaData();
+            String result = "";
+            Response r = null;
+            while(rs.next()){
+                r = obj_mapper.readValue(rs.getString("expense"), Response.class);
+            }
+            return r.getStatus().equals("success") ? 1 : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
     }
 
+    //done, left to check
+    public int checkin_customer(String aadhar, String contact){
+
+        String sql= "SELECT checkin(?, ?) as checkin;";
+        try {
+//            Statement stat = connection.createStatement();
+            PreparedStatement pstat = connection.prepareStatement(sql);
+            pstat.setString(1, contact);
+            pstat.setString(2, aadhar);
+            ResultSet rs =pstat.executeQuery();
+            ResultSetMetaData resultSetMetaData =rs.getMetaData();
+            String result = "";
+            Response r = null;
+            while(rs.next()){
+                r = obj_mapper.readValue(rs.getString("checkin"), Response.class);
+            }
+            return r.getStatus().equals("success") ? 1 : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
+    }
+
+    //done, left to check
     public int checkout_customer(String contact){
-        return 1;
+        String sql= "SELECT Checkout2(?) as checkout;";
+        try {
+//            Statement stat = connection.createStatement();
+            PreparedStatement pstat = connection.prepareStatement(sql);
+            pstat.setString(1, contact);
+            ResultSet rs =pstat.executeQuery();
+            ResultSetMetaData resultSetMetaData =rs.getMetaData();
+            String result = "";
+            Response r = null;
+            while(rs.next()){
+                r = obj_mapper.readValue(rs.getString("checkout"), Response.class);
+            }
+            return r.getStatus().equals("success") ? 1 : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
     }
 
-    public int book_room(){
-        //db request
-        return 1;
+    //done, left to check
+    public int book_room(String checkin_date, String checkout_date, String address, String name, String contact, int count_normal, int count_deluxe){
+
+        String sql= "SELECT RoomBooking(?, ?, ?, ?, ?, ?, ?) as booking;";
+        try {
+            PreparedStatement pstat = connection.prepareStatement(sql);
+            pstat.setString(1, checkin_date);
+            pstat.setString(2, checkout_date);
+            pstat.setString(3, address);
+            pstat.setString(4, name);
+            pstat.setString(5, contact);
+            pstat.setInt(6, count_normal);
+            pstat.setInt(7, count_deluxe);
+            ResultSet rs =pstat.executeQuery();
+            ResultSetMetaData resultSetMetaData =rs.getMetaData();
+            String result = "";
+            Response r = null;
+            while(rs.next()){
+                r = obj_mapper.readValue(rs.getString("booking"), Response.class);
+            }
+            return r.getStatus().equals("success") ? 1 : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
+    }
+
+    //done
+    public int register_staff(String name, String contact, String username, String password){
+//        String name="test_staff";
+//        String contact="1234";
+//        String username="test";
+//        String password="9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
+        String sql= "SELECT * FROM Staff Where staff_contact = ?";
+        try {
+            PreparedStatement pstat = connection.prepareStatement(sql);
+            pstat.setString(1, contact);
+            ResultSet rs =pstat.executeQuery();
+            ResultSetMetaData resultSetMetaData =rs.getMetaData();
+            int colCount = resultSetMetaData.getColumnCount();
+            if(colCount != 0){
+                sql= "INSERT INTO Staff(staff_name, staff_contact, staff_username, staff_password) VALUES ( ? , ? , ? , ? );";
+                pstat = connection.prepareStatement(sql);
+                pstat.setString(1, name);
+                pstat.setString(2, contact);
+                pstat.setString(3, username);
+                pstat.setString(4, password);
+                if(pstat.executeUpdate() > 0)
+                    return 1;
+                else return -1;
+            } else return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+
+    }
+
+    // done, left to check
+    public int cancel_booking(String contact){
+        String sql= "SELECT CancelBooking(?) as cancel;";
+        try {
+//            Statement stat = connection.createStatement();
+            PreparedStatement pstat = connection.prepareStatement(sql);
+            pstat.setString(1, contact);
+            ResultSet rs =pstat.executeQuery();
+            ResultSetMetaData resultSetMetaData =rs.getMetaData();
+            String result = "";
+            Response r = null;
+            while(rs.next()){
+                r = obj_mapper.readValue(rs.getString("cancel"), Response.class);
+            }
+            return r.getStatus().equals("success") ? 1 : 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
     }
 }

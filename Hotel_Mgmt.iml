@@ -7,10 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/src/JAR/mysql-connector-j-8.4.0/mysql-connector-j-8.4.0/mysql-connector-j-8.4.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Intellij IDEA/mysql-connector-j-8.4.0/mysql-connector-j-8.4.0/mysql-connector-j-8.4.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -19,7 +19,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../Intellij IDEA/mysql-connector-j-8.4.0/mysql-connector-j-8.4.0/mysql-connector-j-8.4.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Intellij IDEA/jackson-annotations-2.17.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -38,15 +38,6 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../../Intellij IDEA/jackson-databind-2.17.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../Intellij IDEA/jackson-annotations-2.17.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
