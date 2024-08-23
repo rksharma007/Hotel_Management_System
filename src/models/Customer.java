@@ -29,11 +29,14 @@ public class Customer {
     @JsonProperty("contact")
     private String contact;
 
+    @JsonProperty("status")
+    private int status;
+
     // Default constructor (required for deserialization)
     public Customer() {}
 
     // Parameterized constructor (optional)
-    public Customer(int bookingId, String customerName, String checkIn, String checkOut, String bookingDate, String address, String idProof, String contact) {
+    public Customer(int bookingId, String checkIn, String checkOut, String bookingDate, String address, String customerName, String idProof, String contact, int status) {
         this.bookingId = bookingId;
         this.customerName = customerName;
         this.checkIn = checkIn;
@@ -42,6 +45,7 @@ public class Customer {
         this.address = address;
         this.idProof = idProof;
         this.contact = contact;
+        this.status=status;
     }
 
     // Getters and setters
@@ -107,5 +111,13 @@ public class Customer {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    public int getStatus(){
+        return this.status;
+    }
+
+    public void setStatus(int status){
+        this.status = status;
     }
 }
