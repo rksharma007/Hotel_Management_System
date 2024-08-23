@@ -1,5 +1,6 @@
 package user.admin;
 
+import models.Response;
 import user.User_Interface;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,11 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import database.routes.Admin_Route;
 import models.Customer;
 import models.Room;
-import user.User_Interface;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -171,7 +168,7 @@ public class Admin implements User_Interface, Admin_Interface {
     }
 
     @Override
-    public int check_out_customer(String contact) {
+    public Response check_out_customer(String contact) {
         return admin_route.checkout_customer(contact);
     }
 

@@ -26,7 +26,7 @@ public class Admin_Route {
     public int login(String username, String password){
         Connection connection = DBConnection.get_connection();
 
-        String sql= "SELECT * FROM Admin WHERE admin_username=? and admin_password=?";
+        String sql= "SELECT * FROM Admin WHERE admin_username= ? and admin_password=?";
         try {
             PreparedStatement pstat = connection.prepareStatement(sql);
             pstat.setString(1, username);
@@ -35,7 +35,10 @@ public class Admin_Route {
             ResultSetMetaData resultSetMetaData =rs.getMetaData();
             int colCount = resultSetMetaData.getColumnCount();
 //            System.out.println(colCount);
-            if(colCount == 0)
+            int count=0;
+            while(rs.next())
+                count++;
+            if(count == 0)
                 return 0;
             else
                 return 1;
@@ -237,8 +240,9 @@ public class Admin_Route {
     }
 
     //done, left to check
-    public int checkout_customer(String contact){
+    public Response checkout_customer(String contact){
         String sql= "SELECT Checkout2(?) as checkout;";
+        Response r = null;
         try {
 //            Statement stat = connection.createStatement();
             PreparedStatement pstat = connection.prepareStatement(sql);
@@ -246,11 +250,10 @@ public class Admin_Route {
             ResultSet rs =pstat.executeQuery();
             ResultSetMetaData resultSetMetaData =rs.getMetaData();
             String result = "";
-            Response r = null;
             while(rs.next()){
                 r = obj_mapper.readValue(rs.getString("checkout"), Response.class);
             }
-            return r.getStatus().equals("success") ? 1 : 0;
+            return r;
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (JsonMappingException e) {
@@ -258,7 +261,7 @@ public class Admin_Route {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return -1;
+        return r;
     }
 
     //done, left to check
