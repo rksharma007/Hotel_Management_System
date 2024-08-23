@@ -1,7 +1,10 @@
 package user.staff;
 
+import models.Service;
+
+import java.util.List;
+
 public interface Staff_Interface {
-    int register(String name, String contact, String username, String password);
-    int get_service();
-    int add_customer_expense(String room);
+    List<Service> get_service();
+    int add_customer_expense(int room_no, int service_id);
 }

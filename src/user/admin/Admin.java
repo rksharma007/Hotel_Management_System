@@ -8,6 +8,7 @@ import user.User_Interface;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Admin implements User_Interface, Admin_Interface {
@@ -53,58 +54,81 @@ public class Admin implements User_Interface, Admin_Interface {
 //        password encryption
         String hashedPassword = hashing(password);
 //        Check if username and password exist
-        return admin_route.is_exist(username,hashedPassword);
+        return admin_route.login(username,hashedPassword);
     }
 
     @Override
-    public int get_customer_details() {
-//        Retrieves all available customers from the table.
+    public List<Customer> get_customer_details() {
+//        Retrieves all current available customers from the table.
         List<Customer> customers = admin_route.get_customers();
-        return 1;
+        return customers;
     }
 
     @Override
-    public int get_audit_details() {
-        return 0;
-    }
-
-
-    @Override
-    public int check_availability(String checkin, String checkout){
-        if(checkin.isEmpty() && checkout.isEmpty()){
-            admin_route.check_availability(checkin,checkout);
-            return 1;
+    public List<Room> check_availability(String checkin, String checkout){
+        if(checkin.isEmpty() || checkout.isEmpty()){
+            return null;
         }
-        return 0;
+        return admin_route.check_availability(checkin,checkout);
+//        return 1;
     }
+
+    @Override
+    public List<Customer> get_audit_details() {
+//        retrieves all customers from history
+        List<Customer> customers = admin_route.get_audit_table();
+        return customers;
+    }
+
+    public List<Room> get_room_details(String contact){
+        if(contact.isEmpty())return null;
+
+        return admin_route.get_room_details(contact);
+    }
+
+    @Override
+    public int pay_expenses(int room_no) {
+        if (room_no<=0)
+            return 0;
+
+        return admin_route.pay_expenses(room_no);
+    }
+
+    @Override
+    public int check_out_customer(String contact) {
+        return admin_route.checkout_customer(contact);
+    }
+
 //------------
     @Override
-    public int book_customer(String check_in, String check_out, String booking_date, String address, String cust_name, String contact, Room r1, Room r2) {
-
+    public int book_customer(String check_in, String check_out, String address, String cust_name, String contact, int cnt1, int cnt2) {
+        if(check_in.isEmpty() || check_out.isEmpty() || address.isEmpty() || cust_name.isEmpty() || contact.isEmpty())
         return 0;
+        return admin_route.book_room(check_in,check_out, address,cust_name,contact,cnt1,cnt2);
     }
 
     @Override
-    public int check_in_customer() {
-        return 0;
+    public List<Room> check_in_customer(String adhaar_no, String contact) {
+        List<Room> alloted_rooms = new ArrayList<>();
+        if(adhaar_no.isEmpty() || contact.isEmpty() )
+        return null;
+
+        if(admin_route.checkin_customer(adhaar_no,contact)==0)return null;
+
+        return get_room_details(contact);
     }
 
     @Override
-    public int check_out_customer() {
-        return 0;
-    }
-
-    @Override
-    public int pay_expense() {
-        return 0;
-    }
-    @Override
-    public int register_staff(String name, String ph_no, String username, String password){
+    public int register_staff(String name, String contact, String username, String password){
 //        password get encrypted
-//        retrieve data from the staff table
-//        Check if a person with username exists
-        return 0; // user already exists
-//        If not exists, add new user in the staff table
-//        return 1; // user added to the db.
+        if(name.isEmpty() || contact.isEmpty() || username.isEmpty() || password.isEmpty())return 0;
+        String hashedPassword = hashing(password);
+        return admin_route.register_staff(name,contact,username,hashedPassword);
+    }
+
+    @Override
+    public int cancel_booking(String contact){
+        if(contact.isEmpty())return 0;
+        return admin_route.cancel_booking(contact);
     }
 }

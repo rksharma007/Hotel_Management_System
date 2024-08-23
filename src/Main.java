@@ -1,3 +1,6 @@
+import ui.services.AdminLoginUI;
+import ui.ui_layer.LoginUser;
+
 public class Main{
     public static void main(String[] args) {
 //        DriverClass d = new DriverClass();
@@ -21,5 +24,8 @@ public class Main{
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
+        LoginUser newAdmin = new AdminLoginUI();
+        newAdmin.loginRequester();
+//        System.out.println("Working!");
     }
 }
