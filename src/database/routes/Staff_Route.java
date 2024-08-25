@@ -23,13 +23,18 @@ public class Staff_Route {
     public int login(String username, String password){
         Connection connection = DBConnection.get_connection();
 
-        String sql= "SELECT * FROM Admin WHERE admin_username='"+username+"' and admin_password='"+password+"'";
+        String sql= "SELECT * FROM Staff WHERE staff_username=? and staff_password=?";
         try {
-            Statement stat = connection.createStatement();
-            ResultSet rs =stat.executeQuery(sql);
+            PreparedStatement pstat = connection.prepareStatement(sql);
+            pstat.setString(1, username);
+            pstat.setString(2, password);
+            ResultSet rs =pstat.executeQuery();
             ResultSetMetaData resultSetMetaData =rs.getMetaData();
-            int colCount = resultSetMetaData.getColumnCount();
-            if(colCount == 0)
+//            int colCount = resultSetMetaData.getColumnCount();
+            int rowCount=0;
+            while(rs.next())
+                rowCount++;
+            if(rowCount == 0)
                 return 0;
             else
                 return 1;

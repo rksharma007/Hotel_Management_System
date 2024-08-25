@@ -40,7 +40,7 @@ public class CheckoutPageUI implements UserInputHandler {
                 int pay_expense_status = admin.pay_expenses(room_input);
                 if(pay_expense_status==1){
                     MessageDisplay.showMessage("Expenses cleared. Checked Out successfully");
-                    pendingExpenseStatus="success"; //Expense cleared
+                    pendingExpenseStatus="success";
                 }else{
                     MessageDisplay.showMessage("Expense not cleared. Can't checkout");
                 }
@@ -50,7 +50,7 @@ public class CheckoutPageUI implements UserInputHandler {
             }
         }
         else{
-            MessageDisplay.showMessage("No Expenses found.\nCheckout Successfull");
+            MessageDisplay.showMessage("No Expenses found.\n");
         }
     }
 }

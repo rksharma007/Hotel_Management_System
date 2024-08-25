@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import database.DBConnection;
+import models.Audit;
 import models.Customer;
 import models.Response;
 import models.Room;
@@ -110,11 +111,11 @@ public class Admin_Route {
         return available_rooms;
     }
 
-    // done
-    public List<Customer> get_audit_table(){
-        List<Customer> audit_customer = new ArrayList<>();
+    // left
+    public List<Audit> get_audit_table(){
+        List<Audit> audit_customer = new ArrayList<>();
 
-        String sql= "SELECT * FROM Booking Where status = 2;";
+        String sql= "SELECT * FROM Audit";
         try {
             Statement stat = connection.createStatement();
             ResultSet rs =stat.executeQuery(sql);
@@ -122,16 +123,18 @@ public class Admin_Route {
             int colCount = resultSetMetaData.getColumnCount();
             String result = "";
             while(rs.next()){
-                audit_customer.add(new Customer(
+                audit_customer.add(new Audit(
+                        rs.getInt("audit_id"),
                         rs.getInt("booking_id"),
-                        rs.getString("check_in"),
-                        rs.getString("check_out"),
-                        rs.getString("booking_date"),
+                        rs.getString("name"),
+                        rs.getString("contact"),
+                        rs.getString("id_proof"),
                         rs.getString("address"),
-                        rs.getString("booking_id"),
-                        rs.getString("booking_id"),
-                        rs.getString("booking_id"),
-                        rs.getInt("status")
+                        rs.getString("checkin"),
+                        rs.getString("checkout"),
+                        rs.getString("rooms"),
+                        rs.getInt("services_expense"),
+                        rs.getInt("total_rent")
                 ));
             }
             return audit_customer;
@@ -146,7 +149,7 @@ public class Admin_Route {
     public List<Room> get_room_details(String contact){
         List<Room> available_rooms = new ArrayList<>();
 
-        String sql= "SELECT * FROM Booking Where contact=?;";
+        String sql= "SELECT b.booking_id as booking_id FROM Booking b Where b.contact=?;";
         try {
 //            Statement stat = connection.createStatement();
             PreparedStatement pstat = connection.prepareStatement(sql);
@@ -156,8 +159,13 @@ public class Admin_Route {
             int colCount = resultSetMetaData.getColumnCount();
             if(colCount != 0){
                 int booking_id=-1;
+                boolean once=false;
                 while(rs.next()){
-                    booking_id = rs.getInt("booking_id");
+                    if(!once){
+                        booking_id = rs.getInt("booking_id");
+                        once = true;
+                    }
+//                    System.out.println(booking_id);
                 }
                 sql = "SELECT r.room_number as room_number, r.room_type as room_type, r.price as price, r.prebooked as prebooked FROM Room_Booking rb INNER JOIN Room r on rb.room_number = r.room_number WHERE rb.booking_id = ?";
                 pstat = connection.prepareStatement(sql);
@@ -175,6 +183,14 @@ public class Admin_Route {
 //                            rs.getInt("room_number")
 //                    ));
 //                }
+                while(rs.next()){
+                    available_rooms.add(new Room(
+                            rs.getInt("price"),
+                            rs.getInt("prebooked"),
+                            rs.getInt("room_type"),
+                            rs.getInt("room_number")
+                    ));
+                }
                 for(Room r: available_rooms){
                     System.out.println(r.getRoomNumber()+" "+r.getRoomType()+" "+r.getPrice()+" "+r.getPrebooked());
                 }

@@ -1,6 +1,7 @@
 package user.admin;
 
 import database.routes.Admin_Route;
+import models.Audit;
 import models.Customer;
 import models.Response;
 import models.Room;
@@ -75,9 +76,9 @@ public class Admin implements User_Interface, Admin_Interface {
     }
 
     @Override
-    public List<Customer> get_audit_details() {
+    public List<Audit> get_audit_details() {
 //        retrieves all customers from history
-        List<Customer> customers = admin_route.get_audit_table();
+        List<Audit> customers = admin_route.get_audit_table();
         return customers;
     }
 
