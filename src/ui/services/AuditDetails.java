@@ -21,16 +21,16 @@ public class AuditDetails {
         for(Audit customer: auditDetails){
             System.out.println(
                     customer.getAuditId() + "   "
-                            + customer.getBookingId() + "   "
-                            + customer.getName() + "   "
-                            + customer.getContact() + "   "
-                            + customer.getIdProof() + "   "
-                            + customer.getAddress() + "   "
-                            + customer.getCheckin() + "   "
-                            + customer.getCheckout() + "   "
-                            + customer.getRooms() + "   "
-                            + customer.getServicesExpense() + "   "
-                            + customer.getTotalRent() + "\n");
+                    + customer.getBookingId() + "   "
+                    + customer.getName() + "   "
+                    + customer.getContact() + "   "
+                    + customer.getIdProof() + "   "
+                    + customer.getAddress() + "   "
+                    + customer.getCheckin() + "   "
+                    + customer.getCheckout() + "   "
+                    + customer.getRooms() + "   "
+                    + customer.getServicesExpense() + "   "
+                    + customer.getTotalRent() + "\n");
         }
     }
 }

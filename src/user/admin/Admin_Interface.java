@@ -1,19 +1,21 @@
 package user.admin;
 
+import models.Audit;
 import models.Customer;
+import models.Response;
 import models.Room;
 
 import java.util.List;
 
 public interface Admin_Interface {
     List<Customer> get_customer_details();
-    List<Customer> get_audit_details();
+    List<Audit> get_audit_details();
 
     //------------
     int book_customer(String check_in, String check_out, String address, String cust_name, String contact, int cnt1, int cnt2);
 
-    List<Room> check_in_customer(String adhaar_no, String contact);
-    int check_out_customer(String contact);
+    int check_in_customer(String adhaar_no, String contact);
+    Response check_out_customer(String contact);
 
     int pay_expenses(int room_no);
 

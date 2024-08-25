@@ -13,6 +13,7 @@ public class StaffMenu implements DisplayMenu {
     }
     @Override
     public int getChoice(Scanner scanner){
+        System.out.println("Enter your choice : ");
         this.choice = scanner.nextInt();
         if(choice!=1 && choice!=2){
             System.out.println("Enter a valid choice ");
