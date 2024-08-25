@@ -1,6 +1,6 @@
 package ui.services;
 
-public class Audit {
+public class AuditDetails {
     public void getAudit(){
 
     }
