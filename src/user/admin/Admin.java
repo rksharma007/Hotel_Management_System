@@ -2,6 +2,7 @@ package user.admin;
 
 import database.routes.Admin_Route;
 import models.Customer;
+import models.Response;
 import models.Room;
 import user.User_Interface;
 
@@ -95,7 +96,7 @@ public class Admin implements User_Interface, Admin_Interface {
     }
 
     @Override
-    public int check_out_customer(String contact) {
+    public Response check_out_customer(String contact) {
         return admin_route.checkout_customer(contact);
     }
 
@@ -108,14 +109,12 @@ public class Admin implements User_Interface, Admin_Interface {
     }
 
     @Override
-    public List<Room> check_in_customer(String adhaar_no, String contact) {
-        List<Room> alloted_rooms = new ArrayList<>();
+    public int check_in_customer(String adhaar_no, String contact) {
+//        List<Room> alloted_rooms = new ArrayList<>();
         if(adhaar_no.isEmpty() || contact.isEmpty() )
-        return null;
+        return 0;
 
-        if(admin_route.checkin_customer(adhaar_no,contact)==0)return null;
-
-        return get_room_details(contact);
+        return admin_route.checkin_customer(adhaar_no,contact);
     }
 
     @Override

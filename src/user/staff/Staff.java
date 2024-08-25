@@ -59,12 +59,11 @@ public class Staff implements User_Interface, Staff_Interface {
 
     @Override
     public List<Service> get_service() {
-        List<Service> services = new ArrayList<>();// service_id, service_name
-        return services;
+        return staff_route.get_services();
     }
 
     @Override
     public int add_customer_expense(int room_no, int service_id) {
-        return 0;
+        return staff_route.add_expense(room_no,service_id);
     }
 }
